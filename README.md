@@ -32,4 +32,4 @@ MIT
 
 或者你可以直接打钱，我也不介意 :D
 
-<img src="README.assets/1519287315941.jpg" alt="1519287315941" style="zoom:25%;" /><img src="README.assets/mm_facetoface_collect_qrcode_1519287360372.png" alt="mm_facetoface_collect_qrcode_1519287360372" style="zoom:25%;" />
+<img src="README.assets/1519287315941.jpg" alt="1519287315941" height="200" /><img src="README.assets/mm_facetoface_collect_qrcode_1519287360372.png" alt="mm_facetoface_collect_qrcode_1519287360372" height="200" />
