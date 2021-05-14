@@ -1,3 +1,6 @@
+# server酱通知
+enable_inform = False
+inform_url = ""
 # 直播间ID （list）
 rooms = [22992639]
 # 是否仅录制音频
