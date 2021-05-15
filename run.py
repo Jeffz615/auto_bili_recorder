@@ -86,8 +86,9 @@ class autoUpload():
             uploadFilepath).rstrip('.flv').split('_')
         roomid = uploadFilenameSplit[-1]
         recordDate = uploadFilenameSplit[0]
-        bp = ByPy()
-        bp.upload(uploadFilepath, f'{roomid}/{recordDate}/{uploadFilename}')
+        bp = ByPy(verify=False)
+        if bp.upload(uploadFilepath, f'{roomid}/{recordDate}/{uploadFilename}')!=0:
+            raise Exception('upload fail.')
 
     def run(self):
         while True:
