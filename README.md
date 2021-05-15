@@ -29,7 +29,3 @@ MIT
 ## 支持我
 
 如果有好的想法，请**提交issue**或**pull request**贡献出你的代码
-
-或者你可以直接打钱，我也不介意 :D
-
-<img src="README.assets/1519287315941.jpg" alt="1519287315941" height="200" /><img src="README.assets/mm_facetoface_collect_qrcode_1519287360372.png" alt="mm_facetoface_collect_qrcode_1519287360372" height="200" />
