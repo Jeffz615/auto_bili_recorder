@@ -30,8 +30,6 @@ class BiliBiliLiveRecorder(BiliBiliLive):
                                 desp=room_info['roomname'])
                     self.print(self.room_id, room_info['roomname'])
                     break
-                else:
-                    self.print(self.room_id, '等待开播')
             except Exception as e:
                 self.print(self.room_id, 'Error:' + str(e))
             time.sleep(interval)
@@ -54,8 +52,10 @@ class BiliBiliLiveRecorder(BiliBiliLive):
                     for chunk in resp.iter_content(chunk_size=1024):
                         f.write(chunk) if chunk else None
                         flag = True
-                if flag:
+                if flag and os.path.getsize(output_filename)>256:
                     self.queue.put(output_filename)
+                else:
+                    os.remove(output_filename)
                 break
             except Exception as e:
                 self.print(self.room_id, 'Error while recording:' + str(e))
@@ -64,6 +64,7 @@ class BiliBiliLiveRecorder(BiliBiliLive):
     def run(self):
         while True:
             try:
+                self.print(self.room_id, '等待开播')
                 urls = self.check(interval=self.check_interval)
                 filename = utils.generate_filename(self.room_id)
                 self.record(urls, filename)
@@ -102,6 +103,8 @@ class autoUpload():
                     utils.print_log('uploader', '文件上传中')
                     self.uploadApi(uploadFilepath)
                     utils.print_log('uploader', '文件上传完成')
+                else:
+                    os.remove(uploadFilepath)
                 if self.delAfterUpload:
                     os.remove(uploadFilepath)
             except Exception as e:

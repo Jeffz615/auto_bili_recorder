@@ -2,6 +2,8 @@ import time
 import requests
 import config
 import os
+import string
+import random
 
 
 def get_current_time(time_format):
@@ -12,7 +14,7 @@ def get_current_time(time_format):
 
 def generate_filename(room_id):
     data = dict()
-    data['c_time'] = get_current_time('%Y%m%d_%H%M')
+    data['c_time'] = get_current_time('%Y%m%d_%H%M%S_' + ''.join(random.sample(string.ascii_letters + string.digits,4)))
     data['room_id'] = room_id
     baseDir = os.path.join(os.getcwd(), 'files')
     checkRecordDirExisted(baseDir)
