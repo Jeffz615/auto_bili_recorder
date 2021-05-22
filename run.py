@@ -86,7 +86,7 @@ class autoUpload():
             uploadFilepath).rstrip('.flv').split('_')
         roomid = uploadFilenameSplit[-1]
         recordDate = uploadFilenameSplit[0]
-        bp = ByPy(verify=False)
+        bp = ByPy(deletesource=self.delAfterUpload)
         if bp.upload(uploadFilepath, f'{roomid}/{recordDate}/{uploadFilename}')!=0:
             raise Exception('upload fail.')
 
@@ -106,8 +106,8 @@ class autoUpload():
                     utils.print_log('uploader', '文件上传完成')
                 else:
                     os.remove(uploadFilepath)
-                if self.delAfterUpload:
-                    os.remove(uploadFilepath)
+                # if self.delAfterUpload:
+                #     os.remove(uploadFilepath)
             except Exception as e:
                 utils.print_log('uploader', 'Error while upload:' + str(e))
 
