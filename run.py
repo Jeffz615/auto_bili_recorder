@@ -52,7 +52,7 @@ class BiliBiliLiveRecorder(BiliBiliLive):
                     for chunk in resp.iter_content(chunk_size=1024):
                         f.write(chunk) if chunk else None
                         flag = True
-                if flag and os.path.getsize(output_filename)>256:
+                if flag and os.path.getsize(output_filename) > 256:
                     self.queue.put(output_filename)
                 else:
                     os.remove(output_filename)
@@ -75,9 +75,10 @@ class BiliBiliLiveRecorder(BiliBiliLive):
 
 
 class autoUpload():
-    def __init__(self, queue, delAfterUpload):
+    def __init__(self, queue, delAfterUpload, forceDelAfterUpload):
         self.queue = queue
         self.delAfterUpload = delAfterUpload
+        self.forceDelAfterUpload = forceDelAfterUpload
 
     def uploadApi(self, uploadFilepath):
         uploadFilename = os.path.basename(
@@ -86,8 +87,10 @@ class autoUpload():
             uploadFilepath).rstrip('.flv').split('_')
         roomid = uploadFilenameSplit[-1]
         recordDate = uploadFilenameSplit[0]
-        bp = ByPy(deletesource=self.delAfterUpload)
-        if bp.upload(uploadFilepath, f'{roomid}/{recordDate}/{uploadFilename}')!=0:
+        bp = ByPy(deletesource=self.delAfterUpload, debug=True)
+        if bp.upload(uploadFilepath, f'{roomid}/{recordDate}/{uploadFilename}') != 0:
+            if self.forceDelAfterUpload and os.path.isfile(uploadFilepath):
+                os.remove(uploadFilepath)
             raise Exception('upload fail.')
 
     def run(self):
@@ -106,8 +109,6 @@ class autoUpload():
                     utils.print_log('uploader', '文件上传完成')
                 else:
                     os.remove(uploadFilepath)
-                # if self.delAfterUpload:
-                #     os.remove(uploadFilepath)
             except Exception as e:
                 utils.print_log('uploader', 'Error while upload:' + str(e))
 
@@ -117,13 +118,14 @@ if __name__ == '__main__':
     onlyAudio = config.onlyAudio
     qn = config.qn
     delAfterUpload = config.delAfterUpload
+    forceDelAfterUpload = config.forceDelAfterUpload
     mp = multiprocessing.Process
     q = multiprocessing.Queue()
     tasks = [
         mp(target=BiliBiliLiveRecorder(str(room_id), queue=q, onlyAudio=onlyAudio, qn=qn).run) for room_id in input_id
     ]
     tasks.append(mp(target=autoUpload(
-        queue=q, delAfterUpload=delAfterUpload).run))
+        queue=q, delAfterUpload=delAfterUpload, forceDelAfterUpload=forceDelAfterUpload).run))
     for i in tasks:
         i.start()
     for i in tasks:
